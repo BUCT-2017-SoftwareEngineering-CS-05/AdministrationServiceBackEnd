@@ -2,6 +2,7 @@
   "profiles": {
     "AdministrationServiceBackEnd": {
       "commandName": "Project",
+      "launchUrl": "",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
