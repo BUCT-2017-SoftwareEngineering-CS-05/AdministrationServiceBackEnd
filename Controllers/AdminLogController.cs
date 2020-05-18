@@ -27,13 +27,13 @@ namespace AdministrationServiceBackEnd.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] Admin admin)
         {
-            if (AccountSystem.LogIn(admin.Username, admin.Password))
-            {
-                return Json(new { code = 0, data = new{ name = admin.Username,pwd = admin.Password,token = GetToken(admin) },msg="登录成功" });
-            }
-            return Json(new { code= -1, msg = "用户名或密码错误" });
-            return Json(new { data = "Fail" });
-            
+            MuseumContext _context = new MuseumContext();
+            IManageAdmin _manage = new ManageAdmin(_context);
+            if (_manage.GetAdminByUsername(admin.Username) == null)
+                return Json(new { code = -1, msg = "用户名不存在" });
+            if (_manage.CheckPassword(admin.Username, admin.Password))
+                return Json(new { code = 0, data = new { name = admin.Username, pwd = admin.Password, token = GetToken(admin) }, msg = "登录成功" });
+            return Json(new { code = -1, msg = "用户名或密码错误" });
         }
         [Authorize]
         [HttpGet("Info")]
@@ -64,7 +64,7 @@ namespace AdministrationServiceBackEnd.Controllers
             //var result = _Ziphelper.CreateFileAndZip(id);
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst("Username")?.Value;
-            return Json(new{name = userId });
+            return Json(new { name = userId });
             //return Json(new { code = result.Code, Id = result.Id, strErr = result.strErr });
         }
         private string GetToken(Admin admin)
