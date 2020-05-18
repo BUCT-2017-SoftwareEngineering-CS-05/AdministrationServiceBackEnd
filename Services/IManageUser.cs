@@ -7,6 +7,6 @@ namespace AdministrationServiceBackEnd.Services
     {
         IEnumerable<User> GetAllUsers();
         User GetUserById(string id);
-        void MuteUser(string id, bool mute);
+        void MuteUser(string id, int mute);
     }
 }
