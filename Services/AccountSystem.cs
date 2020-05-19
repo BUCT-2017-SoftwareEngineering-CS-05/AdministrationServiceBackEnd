@@ -10,7 +10,7 @@ namespace AdministrationServiceBackEnd.Services
         public static bool isLogged = false;
         public static int log_id;
         public static string log_username;
-        public static int log_level;
+        public static int log_roles;
         public static bool LogIn(string username, string password)
         {
             Console.WriteLine(username + "   " + password);
@@ -25,7 +25,7 @@ namespace AdministrationServiceBackEnd.Services
                 isLogged = true;
                 log_username = username;
                 log_id = _manage.GetAdminByUsername(username).Id;
-                log_level = _manage.GetLevelById(log_id);
+                log_roles = _manage.GetRolesById(log_id);
                 return true;
             }
             Console.WriteLine("password error");
@@ -42,17 +42,17 @@ namespace AdministrationServiceBackEnd.Services
             _manage.GetAdminById(log_id).Password = password;
             _context.SaveChanges();
         }
-        public static void AddAdmin(string username, string pwd, int level)
+        public static void AddAdmin(string username, string pwd, int roles)
         {
-            if (log_level < 3)
+            if (log_roles < 3)
                 return;
-            _manage.AddAdmin(username, pwd, level);
+            _manage.AddAdmin(username, pwd, roles);
         }
-        public static void ChangeLevelById(int id, int new_level)
+        public static void ChangeRolesById(int id, int new_roles)
         {
-            if (log_level < 3 || new_level < 1 || new_level > 3)
+            if (log_roles < 3 || new_roles < 1 || new_roles > 3)
                 return;
-            _manage.GetAdminById(id).Level = new_level;
+            _manage.GetAdminById(id).Roles = new_roles;
         }
     }
 }
