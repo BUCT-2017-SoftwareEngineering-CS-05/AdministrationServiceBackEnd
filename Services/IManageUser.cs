@@ -12,5 +12,6 @@ namespace AdministrationServiceBackEnd.Services
         IEnumerable<User> GetAllUsers();
         User GetUserById(string id);
         void MuteUser(string id, int mute);
+        void ChangePassword(string id, string new_pwd);
     }
 }

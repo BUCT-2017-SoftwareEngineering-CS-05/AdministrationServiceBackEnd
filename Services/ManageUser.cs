@@ -57,5 +57,10 @@ namespace AdministrationServiceBackEnd.Models
             GetUserById(id).Coright = mute;
             _context.SaveChanges();
         }
+        public void ChangePassword(string id, string new_pwd)
+        {
+            GetUserById(id).Userpwd = new_pwd;
+            _context.SaveChanges();
+        }
     }
 }

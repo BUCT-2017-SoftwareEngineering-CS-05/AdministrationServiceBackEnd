@@ -13,29 +13,52 @@ namespace MuseumBackend.Models
         private static MuseumContext _context = new MuseumContext();
         private static IManageUser _user = new ManageUser(_context);
         private static IManageComment _comment = new ManageComment(_context);
-        public static void Mute(string user)
+        
+        public static bool Mute(User user)
         {
-            _user.MuteUser(user, 0);
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            _user.MuteUser(user.Userid, 0);
+            return true;
         }
-        public static void CancelMute(string user)
+        public static bool CancelMute(User user)
         {
-            _user.MuteUser(user, 1);
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            _user.MuteUser(user.Userid, 0);
+            return true;
         }
-        public static void DeleteOneComment(string user, int midex)
+        public static bool DeleteOneComment(User user, int midex)
         {
-            _comment.DeleteComment(user, midex);
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            _comment.DeleteComment(user.Userid, midex);
+            return true;
         }
-        public static IEnumerable<Comment> GetCommentsByUser(string user)
+        public static IEnumerable<Comment> GetCommentsByUser(User user)
         {
-            return _comment.GetCommentsByUser(user);
+            return _comment.GetCommentsByUser(user.Userid);
         }
-        public static void DeleteAllCommentByUser(string user)
+        public static bool DeleteAllCommentByUser(User user)
         {
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
             IEnumerable<Comment> comments = GetCommentsByUser(user);
             foreach(var comment in comments)
                 _context.Remove(comment);
             _context.SaveChanges();
+            return true;
         }
-        
+        public static bool ChangePassword(User user)
+        {
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            User to_change = _user.GetUserById(user.Userid);
+            _context.Remove(to_change);
+            to_change.Userpwd = user.Userpwd;
+            _context.Add(to_change);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }
