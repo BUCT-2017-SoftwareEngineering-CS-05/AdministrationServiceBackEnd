@@ -1,5 +1,6 @@
 using AdministrationServiceBackEnd.Common;
 using AdministrationServiceBackEnd.Models;
+using AdministrationServiceBackEnd.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace AdministrationServiceBackEnd
                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             //services.AddTransient<IManageAdmin, ManageAdmin>();
+            //services.AddTransient<IManageUser, ManageUser>();
             services.ConfigureJwt(Configuration);
             //◊¢»ÎJWT≈‰÷√Œƒº˛
             services.Configure<JwtConfig>(Configuration.GetSection("Authentication:JwtBearer"));

@@ -32,48 +32,49 @@ namespace AdministrationServiceBackEnd.Controllers
             if (_manage.GetAdminByUsername(admin.Username) == null)
                 return Json(new { code = -1, msg = "用户名不存在" });
             if (_manage.CheckPassword(admin.Username, admin.Password))
-                return Json(new { code = 0, data = new { name = admin.Username, pwd = admin.Password, token = GetToken(admin) }, msg = "登录成功" });
+            {
+                admin = _manage.GetAdminByUsername(admin.Username);
+                return Json(new { code = 0, data = new { token = GetToken(admin) }, msg = "登录成功" });
+            }           
             return Json(new { code = -1, msg = "用户名或密码错误" });
         }
         [Authorize]
         [HttpGet("Info")]
         public IActionResult Info()
         {
-            return Json(new { code = 0, data = new { roles = "admin0", id = 1, username = "admin", avatar = "https://www.youbaobao.xyz/mpvue-res/logo.jpg" } });
+            Admin admin = GetAdminFromAuthorizZation();
+            return Json(new { code = 0, 
+                data = new { 
+                    roles = "role"+admin.Roles.ToString(), 
+                    id = admin.Id, 
+                    username = admin.Username,
+                    avatar = "https://www.youbaobao.xyz/mpvue-res/logo.jpg" }
+            });
         }
         [Authorize]
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            return Json(new { code = 0, data = "success" });
+            return Json(new { code = 0, data = "退出成功" });
         }
-        [Authorize]
-        [HttpGet("name")]
-        public IActionResult name()
+        private Admin GetAdminFromAuthorizZation()
         {
-            //var headers = _httpContextAccessor.HttpContext.Request.Headers;
-
-            //var admin=headers["Authorization"];
-            //var Claims = admin.Claims.Count(); //正常是可以获取到所有的Claims的，我试验如果吧token的串修改的话这个地方就取不到了，但还是会进来这个方法，所以要判断下是不是null
-            //return Json(Claims);
-            //var sub = User.FindFirst(d => d.Type == JwtRegisteredClaimNames.Sub)?.Value;
-            //if (string.IsNullOrEmpty(sub))
-            //{
-            //    return Json(new { code = "0", id = "", strErr = "Token验证失败" });
-            //}
-            //var result = _Ziphelper.CreateFileAndZip(id);
+            var admin = new Admin();
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst("Username")?.Value;
-            return Json(new { name = userId });
-            //return Json(new { code = result.Code, Id = result.Id, strErr = result.strErr });
+            admin.Username = claimsIdentity.FindFirst("Username")?.Value;
+            admin.Roles = int.Parse(claimsIdentity.FindFirst("Roles")?.Value);
+            admin.Id = int.Parse(claimsIdentity.FindFirst("Id")?.Value);
+            return admin;
         }
         private string GetToken(Admin admin)
         {
+            
             var claims = new List<Claim>();
             claims.AddRange(new[]
             {
                 new Claim("Username", admin.Username),
-                new Claim(JwtRegisteredClaimNames.Sub, admin.Username),
+                new Claim("Roles", admin.Roles.ToString()),
+                new Claim("Id", admin.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
                 });
