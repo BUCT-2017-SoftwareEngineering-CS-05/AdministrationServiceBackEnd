@@ -53,8 +53,8 @@ namespace AdministrationServiceBackEnd.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Level)
-                    .HasColumnName("level")
+                entity.Property(e => e.Roles)
+                    .HasColumnName("roles")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.Password)

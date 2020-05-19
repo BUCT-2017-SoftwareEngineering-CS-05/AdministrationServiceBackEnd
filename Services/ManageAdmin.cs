@@ -12,12 +12,12 @@ namespace AdministrationServiceBackEnd.Services
         {
             _context = museumContext;
         }
-        public void AddAdmin(string username, string password, int level)
+        public void AddAdmin(string username, string password, int roles)
         {
             Admin admin = new Admin();
             admin.Username = username;
             admin.Password = password;
-            admin.Level = level;
+            admin.Roles = roles;
             _context.Add(admin);
             _context.SaveChanges();
         }
@@ -65,9 +65,9 @@ namespace AdministrationServiceBackEnd.Services
         {
             return GetAdminByUsername(username).Id;
         }
-        public int GetLevelById(int id)
+        public int GetRolesById(int id)
         {
-            return (int)GetAdminById(id).Level;
+            return (int)GetAdminById(id).Roles;
         }
     }
 }
