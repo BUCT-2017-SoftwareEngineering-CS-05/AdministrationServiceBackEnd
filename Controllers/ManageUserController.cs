@@ -1,26 +1,24 @@
 ﻿using AdministrationServiceBackEnd.DtoParameters;
 using AdministrationServiceBackEnd.Models;
 using AdministrationServiceBackEnd.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace AdministrationServiceBackEnd.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ManageUserController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-        [HttpGet("test")]
+        [HttpGet("GetUsers")]
         [HttpHead]
-        public async Task<IActionResult> GetCompanies([FromQuery] UserDtoParameters parameters)
+        public async Task<IActionResult> GetUser([FromQuery] UserDtoParameters parameters)
         {
             //if (!_propertyMappingService.ValidMappingExistsFor<CompanyDto, Company>(parameters.OrderBy))
             //{
@@ -33,8 +31,7 @@ namespace AdministrationServiceBackEnd.Controllers
             //}
             MuseumContext _context = new MuseumContext();
             IManageUser _manageUser = new ManageUser(_context);
-            var users = await _manageUser.GetCompaniesAsync(parameters);
-
+            var users = await _manageUser.GetUsersAsync(parameters);
             var paginationMetadata = new
             {
                 totalCount = users.TotalCount,
@@ -42,7 +39,6 @@ namespace AdministrationServiceBackEnd.Controllers
                 currentPage = users.CurrentPage,
                 totalPages = users.TotalPages
             };
-
             //Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata,
             //    new JsonSerializerOptions
             //    {
@@ -69,32 +65,32 @@ namespace AdministrationServiceBackEnd.Controllers
             //    value = shapedCompaniesWithLinks,
             //    links
             //};
-            Console.Write(users.Count());
             return Ok(new { code=0,data=new{ items=users,total = users.TotalCount} });
         }
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
+        // POST api/<controller>/Changepwd
+        //[Authorize]
+        //[HttpPost("Changepwd")]
+        //public async Task<IActionResult> Changepwd([FromBody]User user)
+        //{
+        //    if (GetRolesFromAuthorizZation() < 0)
+        //    {
+        //        return Json(new { code = -1, msg = "您没有权限修改用户密码！" });
+        //    }
+        //    MuseumContext _context = new MuseumContext();
+        //    IManageUser _manageUser = new ManageUser(_context);
+        //    var users = await _manageUser.GetChangepwdAsync(user);
+        //    return Json(new { code = 0, msg = "密码修改成功" });
+        //}
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            Console.WriteLine(id);
+        }
+        private int GetRolesFromAuthorizZation()
+        {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            return int.Parse(claimsIdentity.FindFirst("Roles")?.Value);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace AdministrationServiceBackEnd.Models
         {
             _context = appDbContext;
         }
-        public async Task<PagedList<User>> GetCompaniesAsync(UserDtoParameters parameters)
+        public async Task<PagedList<User>> GetUsersAsync(UserDtoParameters parameters)
         {
             if (parameters == null)
             {

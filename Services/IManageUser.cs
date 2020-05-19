@@ -8,7 +8,7 @@ namespace AdministrationServiceBackEnd.Services
 {
     interface IManageUser
     {
-        Task<PagedList<User>> GetCompaniesAsync(UserDtoParameters parameters);
+        Task<PagedList<User>> GetUsersAsync(UserDtoParameters parameters);
         IEnumerable<User> GetAllUsers();
         User GetUserById(string id);
         void MuteUser(string id, int mute);
