@@ -55,8 +55,17 @@ namespace MuseumBackend.Models
                 return false;
             User to_change = _user.GetUserById(user.Userid);
             _context.Remove(to_change);
+            _context.SaveChanges();
             to_change.Userpwd = user.Userpwd;
             _context.Add(to_change);
+            _context.SaveChanges();
+            return true;
+        }
+        public static bool DeleteUser(User user)
+        {
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            _context.Remove(_user.GetUserById(user.Userid));
             _context.SaveChanges();
             return true;
         }

@@ -39,10 +39,7 @@ namespace AdministrationServiceBackEnd.Services
         }
         public Admin GetAdminByUsername(string username)
         {
-            Admin admin = _context.Admin.FirstOrDefault(n => n.Username == username);
-            if (admin.Username != username)
-                return null;
-            return admin;
+            return _context.Admin.FirstOrDefault(n => n.Username == username);
         }
 
         public void ModifyUsername(int id, string new_name)
@@ -58,7 +55,6 @@ namespace AdministrationServiceBackEnd.Services
         }
         public bool CheckPassword(string username, string password)
         {
-            Console.WriteLine("input:" + password + " correct:" + GetAdminByUsername(username).Password);
             return GetAdminByUsername(username).Password == password;
         }
         public int GetIdByUsername(string username)
@@ -67,7 +63,7 @@ namespace AdministrationServiceBackEnd.Services
         }
         public int GetRolesById(int id)
         {
-            return (int)GetAdminById(id).Roles;
+            return GetAdminById(id).Roles;
         }
     }
 }
