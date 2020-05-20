@@ -58,7 +58,6 @@ namespace AdministrationServiceBackEnd.Services
         }
         public static bool DeleteUser(User user)
         {
-            System.Console.WriteLine(user.Userid+"jahsfdgajsh");
             if (_user.GetUserById(user.Userid) == null)
                 return false;
             _context.Remove(_user.GetUserById(user.Userid));

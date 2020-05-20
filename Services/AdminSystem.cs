@@ -38,8 +38,8 @@ namespace AdministrationServiceBackEnd.Services
             if (to_change == null)
                 return false;
             _context.Remove(to_change);
+            _context.SaveChanges();
             to_change.Password = admin.Password;
-             _context.SaveChanges();
             _context.Add(to_change);
             _context.SaveChanges();
             return true;
@@ -50,8 +50,9 @@ namespace AdministrationServiceBackEnd.Services
                 return false;
             Admin to_change = _manage.GetAdminById(admin.Id);
             _context.Remove(to_change);
+            _context.SaveChanges();
             to_change.Roles = admin.Roles;
-            _context.Add(admin);
+            _context.Add(to_change);
             _context.SaveChanges();
             return true;
         }
@@ -61,6 +62,7 @@ namespace AdministrationServiceBackEnd.Services
             if (to_change==null)
                 return false;
             _context.Remove(to_change);
+            _context.SaveChanges();
             to_change.Username = admin.Username;
             _context.Add(to_change);
             _context.SaveChanges();

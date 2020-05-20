@@ -61,7 +61,6 @@ namespace AdministrationServiceBackEnd.Services
         }
         public bool CheckPassword(string username, string password)
         {
-            Console.WriteLine("input:" + password + " correct:" + GetAdminByUsername(username).Password);
             return GetAdminByUsername(username).Password == password;
         }
         public int GetIdByUsername(string username)
@@ -70,7 +69,7 @@ namespace AdministrationServiceBackEnd.Services
         }
         public int GetRolesById(int id)
         {
-            return (int)GetAdminById(id).Roles;
+            return GetAdminById(id).Roles;
         }
         public async Task<PagedList<Admin>> GetAdminsAsync(AdminDtoParameters parameters)
         {
