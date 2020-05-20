@@ -1,11 +1,15 @@
-﻿using AdministrationServiceBackEnd.Models;
+﻿using AdministrationServiceBackEnd.DtoParameters;
+using AdministrationServiceBackEnd.Helpers;
+using AdministrationServiceBackEnd.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AdministrationServiceBackEnd.Services
 {
     public interface IManageAdmin
     {
         IEnumerable<Admin> GetAllAdmins();
+        Task<PagedList<Admin>> GetAdminsAsync(AdminDtoParameters parameters);
         Admin GetAdminById(int id);
         Admin GetAdminByUsername(string username);
         void AddAdmin(string username, string pwd, int roles);

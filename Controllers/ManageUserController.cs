@@ -3,6 +3,7 @@ using AdministrationServiceBackEnd.Models;
 using AdministrationServiceBackEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MuseumBackend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace AdministrationServiceBackEnd.Controllers
     [ApiController]
     public class ManageUserController : Controller
     {
+        //[Authorize]
         [HttpGet("GetUsers")]
         [HttpHead]
         public async Task<IActionResult> GetUser([FromQuery] UserDtoParameters parameters)
@@ -69,23 +71,25 @@ namespace AdministrationServiceBackEnd.Controllers
         }
         // POST api/<controller>/Changepwd
         //[Authorize]
-        //[HttpPost("Changepwd")]
-        //public async Task<IActionResult> Changepwd([FromBody]User user)
-        //{
-        //    if (GetRolesFromAuthorizZation() < 0)
-        //    {
-        //        return Json(new { code = -1, msg = "您没有权限修改用户密码！" });
-        //    }
-        //    MuseumContext _context = new MuseumContext();
-        //    IManageUser _manageUser = new ManageUser(_context);
-        //    var users = await _manageUser.GetChangepwdAsync(user);
-        //    return Json(new { code = 0, msg = "密码修改成功" });
-        //}
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(string id)
+        [HttpPost("Changepwd")]
+        public  IActionResult Changepwd([FromBody]User user)
         {
-            Console.WriteLine(id);
+            //if (GetRolesFromAuthorizZation() < 0)
+            //{
+            //    return Json(new { code = -1, msg = "您没有权限修改用户密码！" });
+            //}
+            if(UserSystem.ChangePassword(user))
+                return Json(new { code = 0, msg = "密码修改成功" });
+            return Json(new { code = -1, msg = "密码修改失败" });
+        }
+        // DELETE api/<controller>/5
+        //[Authorize]
+        [HttpGet("Delete")]
+        public IActionResult Delete([FromQuery]User user)
+        {
+           if(UserSystem.DeleteUser(user))
+                return Json(new {code=0,msg="删除成功！" } );
+            return Json(new { code = 0, msg = "删除失败！" });
         }
         private int GetRolesFromAuthorizZation()
         {

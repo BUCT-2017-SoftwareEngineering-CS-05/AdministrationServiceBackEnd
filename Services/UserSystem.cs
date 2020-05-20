@@ -1,12 +1,7 @@
 ﻿using AdministrationServiceBackEnd.Models;
-using AdministrationServiceBackEnd.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace MuseumBackend.Models
+namespace AdministrationServiceBackEnd.Services
 {
     public static class UserSystem
     {
@@ -51,12 +46,22 @@ namespace MuseumBackend.Models
         }
         public static bool ChangePassword(User user)
         {
-            if (_user.GetUserById(user.Userid) == null)
-                return false;
             User to_change = _user.GetUserById(user.Userid);
+            if (to_change == null)
+                return false;
             _context.Remove(to_change);
+            _context.SaveChanges();
             to_change.Userpwd = user.Userpwd;
             _context.Add(to_change);
+            _context.SaveChanges();
+            return true;
+        }
+        public static bool DeleteUser(User user)
+        {
+            System.Console.WriteLine(user.Userid+"jahsfdgajsh");
+            if (_user.GetUserById(user.Userid) == null)
+                return false;
+            _context.Remove(_user.GetUserById(user.Userid));
             _context.SaveChanges();
             return true;
         }

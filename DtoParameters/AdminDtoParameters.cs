@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdministrationServiceBackEnd.DtoParameters
 {
-    public class UserDtoParameters
+    public class AdminDtoParameters
     {
         public int PageNumber { get; set; } = 1;
         private const int MaxPageSize = 50;
@@ -15,7 +15,5 @@ namespace AdministrationServiceBackEnd.DtoParameters
             get => _pageSize;
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
-        //public string OrderBy { get; set; } = "CompanyName";
-        //public string Fields { get; set; }
     }
 }

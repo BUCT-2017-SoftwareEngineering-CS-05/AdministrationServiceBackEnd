@@ -1,7 +1,10 @@
-﻿using AdministrationServiceBackEnd.Models;
+﻿using AdministrationServiceBackEnd.DtoParameters;
+using AdministrationServiceBackEnd.Helpers;
+using AdministrationServiceBackEnd.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdministrationServiceBackEnd.Services
 {
@@ -40,7 +43,7 @@ namespace AdministrationServiceBackEnd.Services
         public Admin GetAdminByUsername(string username)
         {
             Admin admin = _context.Admin.FirstOrDefault(n => n.Username == username);
-            if (admin.Username != username)
+            if (admin == null || admin.Username != username  )
                 return null;
             return admin;
         }
@@ -68,6 +71,15 @@ namespace AdministrationServiceBackEnd.Services
         public int GetRolesById(int id)
         {
             return (int)GetAdminById(id).Roles;
+        }
+        public async Task<PagedList<Admin>> GetAdminsAsync(AdminDtoParameters parameters)
+        {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            var queryExpression = _context.Admin as IQueryable<Admin>;
+            return await PagedList<Admin>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

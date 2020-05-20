@@ -45,13 +45,12 @@ namespace AdministrationServiceBackEnd.Controllers
             Admin admin = GetAdminFromAuthorizZation();
             return Json(new { code = 0, 
                 data = new { 
-                    roles = "role"+admin.Roles.ToString(), 
+                    roles = admin.Roles==3?"admin":"editor", 
                     id = admin.Id, 
                     username = admin.Username,
                     avatar = "https://www.youbaobao.xyz/mpvue-res/logo.jpg" }
             });
         }
-        [Authorize]
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
