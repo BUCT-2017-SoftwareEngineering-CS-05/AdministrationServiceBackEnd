@@ -3,7 +3,6 @@ using AdministrationServiceBackEnd.Models;
 using AdministrationServiceBackEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MuseumBackend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

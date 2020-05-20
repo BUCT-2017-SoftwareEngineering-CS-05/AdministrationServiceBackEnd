@@ -7,15 +7,32 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace MuseumBackend.Models
+namespace AdministrationServiceBackEnd.Models
 {
     public class MuseumSystem
     {
         private static MuseumContext _context = new MuseumContext();
-
-        public static IEnumerable<Maintable> GetAllMuseums()
+        public static IEnumerable<Maintable> GetMaintable()
         {
             return _context.Maintable;
+        }
+        public class MidexAndName
+        {
+            public int midex;
+            public string name;
+            public MidexAndName(int _midex, string _name)
+            {
+                midex = _midex;
+                name = _name;
+            }
+        }
+        public static IEnumerable<MidexAndName> GetAllMuseums()
+        {
+            IEnumerable<Maintable> table = GetMaintable();
+            List<MidexAndName> simple_table = new List<MidexAndName>();
+            foreach (var elem in table)
+                simple_table.Add(new MidexAndName(elem.Midex, elem.Mname));
+            return simple_table.AsEnumerable();
         }
         public static Maintable GetMuseumByMidex(int midex)
         {
