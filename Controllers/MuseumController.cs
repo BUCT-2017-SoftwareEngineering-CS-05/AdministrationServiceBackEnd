@@ -73,49 +73,46 @@ namespace AdministrationServiceBackEnd.Controllers
                 return Json(new { code = 0, msg = "删除成功" });
             return Json(new { code = -1, msg = "删除失败" });
         }
-
-
-
         //[Authorize]
-        //[HttpGet("DeleteExhibitionByEid")]
-        //public IActionResult DeleteExhibitionByeid([FromQuery]Exhibition exhibition)
-        //{
-        //    if(MuseumSystem.DeleteExhibitionByEid(exhibition.Eid))
-        //        return Json(new { code = 0, msg = "删除成功" });
-        //    return Json(new { code = -1, msg = "删除失败" });
-        //}
-        //[Authorize]
-        //[HttpGet("DeleteEducationByAid")]
-        //public IActionResult DeleteEducationByAid([FromQuery]Education education)
-        //{
-        //    if(MuseumSystem.DeleteEducationByAid(education))
-        //        return Json(new { code = 0, msg = "删除成功" });
-        //    return Json(new { code = -1, msg = "删除失败" });
-        //}
+        [HttpPost("DeleteExhibitionByEid")]
+        public IActionResult DeleteExhibitionByeid([FromBody]Exhibition exhibition)
+        {
+            if (MuseumSystem.DeleteExhibitionByEid(exhibition))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
         [Authorize]
-        [HttpGet("DeleteCommentByUseridMidex")]
-        public IActionResult DeleteCommentByUseridMidex([FromQuery]Comment comment)
+        [HttpPost("DeleteEducationByAid")]
+        public IActionResult DeleteEducationByAid([FromBody]Education education)
+        {
+            if (MuseumSystem.DeleteEducationByAid(education))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteCommentByUseridMidex")]
+        public IActionResult DeleteCommentByUseridMidex([FromBody]Comment comment)
         {
             if (UserSystem.DeleteOneComment(comment))
                 return Json(new { code = 0, msg = "删除成功" });
             return Json(new { code = -1, msg = "删除失败" });
         }
-        //[Authorize]
-        //[HttpGet("DeleteNewsById")]
-        //public IActionResult DeleteNewsById([FromQuery]News news)
-        //{
-        //    if(MuseumSystem.DeleteNewsById(news))
-        //        return Json(new { code = 0, msg = "删除成功" });
-        //    return Json(new { code = -1, msg = "删除失败" });
-        //}
-        //[Authorize]
-        //[HttpGet("DeleteCollectionsByOid")]
-        //public IActionResult DeleteCollectionsByOid([FromQuery]Collection collection)
-        //{
-        //    if( MuseumSystem.DeleteCollectionsByOid(collection))
-        //        return Json(new { code = 0, msg = "删除成功" });
-        //    return Json(new { code = -1, msg = "删除失败" });
-        //}
+        [Authorize]
+        [HttpPost("DeleteNewsById")]
+        public IActionResult DeleteNewsById([FromBody]News news)
+        {
+            if (MuseumSystem.DeleteNewsById(news))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteCollectionsByOid")]
+        public IActionResult DeleteCollectionsByOid([FromBody]Collection collection)
+        {
+            if (MuseumSystem.DeleteCollectionsByOid(collection))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
         private bool JudgeRoles(int x)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
