@@ -34,6 +34,7 @@ namespace AdministrationServiceBackEnd.Controllers
             if (_manage.CheckPassword(admin.Username, admin.Password))
             {
                 admin = _manage.GetAdminByUsername(admin.Username);
+                AdminSystem.AddLog(admin.Username, "登录");
                 return Json(new { code = 0, data = new { token = GetToken(admin) }, msg = "登录成功" });
             }           
             return Json(new { code = -1, msg = "用户名或密码错误" });
@@ -56,6 +57,7 @@ namespace AdministrationServiceBackEnd.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
+            AdminSystem.AddLog(GetAdminFromAuthorizZation().Username, "注销");
             return Json(new { code = 0, data = "退出成功" });
         }
         private Admin GetAdminFromAuthorizZation()
