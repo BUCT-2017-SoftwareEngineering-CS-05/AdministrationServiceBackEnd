@@ -7,7 +7,7 @@ namespace AdministrationServiceBackEnd.Services
     {
         IEnumerable<Comment> GetAllComments();
         Comment GetComment(string user, int midex);
-        void DeleteComment(string user, int midex);
+        bool DeleteComment(string user, int midex);
         IEnumerable<Comment> GetCommentsByMidex(int midex);
         IEnumerable<Comment> GetCommentsByUser(string user);
     }

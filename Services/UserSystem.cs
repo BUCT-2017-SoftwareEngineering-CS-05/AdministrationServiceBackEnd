@@ -28,8 +28,7 @@ namespace AdministrationServiceBackEnd.Services
         {
             if (_user.GetUserById(comment.Userid) == null)
                 return false;
-            _comment.DeleteComment(comment.Userid, comment.Midex);
-            return true;
+            return _comment.DeleteComment(comment.Userid, comment.Midex);
         }
         public static IEnumerable<Comment> GetCommentsByUser(User user)
         {

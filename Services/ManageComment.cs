@@ -11,10 +11,14 @@ namespace AdministrationServiceBackEnd.Services
         {
             _context = appDbContext;
         }
-        public void DeleteComment(string user, int midex)
+        public bool DeleteComment(string user, int midex)
         {
-            _context.Remove(GetComment(user, midex));
+            Comment commment = GetComment(user, midex);
+            if (commment == null)
+                return false;
+            _context.Remove(commment);
             _context.SaveChanges();
+            return true;
         }
 
         public IEnumerable<Comment> GetAllComments()
