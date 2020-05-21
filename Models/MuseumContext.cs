@@ -22,6 +22,7 @@ namespace AdministrationServiceBackEnd.Models
         public virtual DbSet<Education> Education { get; set; }
         public virtual DbSet<EfmigrationsHistory> EfmigrationsHistory { get; set; }
         public virtual DbSet<Exhibition> Exhibition { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
         public virtual DbSet<Maintable> Maintable { get; set; }
         public virtual DbSet<MuseumInformation> MuseumInformation { get; set; }
         public virtual DbSet<News> News { get; set; }
@@ -235,6 +236,34 @@ namespace AdministrationServiceBackEnd.Models
                 entity.Property(e => e.Midex)
                     .HasColumnName("midex")
                     .HasColumnType("int(150)");
+            });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Operation)
+                    .IsRequired()
+                    .HasColumnName("operation")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Time)
+                    .IsRequired()
+                    .HasColumnName("time")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasColumnName("username")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<Maintable>(entity =>

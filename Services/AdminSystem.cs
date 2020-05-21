@@ -85,5 +85,10 @@ namespace AdministrationServiceBackEnd.Services
             _context.SaveChanges();
             return true;
         }
+        public static void AddLog(string username, string operation)
+        {
+            _context.Log.Add(new Log { Username=username,Operation=operation,Time= DateTime.Now.ToString() });
+            _context.SaveChanges();
+        }
     }
 }
