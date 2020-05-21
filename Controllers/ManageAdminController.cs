@@ -81,6 +81,15 @@ namespace AdministrationServiceBackEnd.Controllers
             }
             return Json(new { code = 0, msg = "删除失败！" });
         }
+        [Authorize]
+        [HttpGet("GetAdminLogs")]
+        public IActionResult GetAdminLogs([FromQuery]Admin admin)
+        {
+            if (!JudgeRoles(1))
+                return Json(new { code = -1, msg = "您没有权限进行此操作！" });
+            var logs = Backup.GetAllLogs();
+            return Json(new { code = 0, data=new { items = logs, total = logs.Count() } });
+        }
         private bool JudgeRoles(int x)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
