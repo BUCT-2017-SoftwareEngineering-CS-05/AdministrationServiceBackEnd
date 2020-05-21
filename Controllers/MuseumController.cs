@@ -32,7 +32,7 @@ namespace AdministrationServiceBackEnd.Controllers
         }
         [Authorize]
         [HttpGet("GetExhibitionByMidex")]
-        public IActionResult GetMuseumInformationByMidex([FromQuery]Maintable maintable)
+        public IActionResult GetExhibitionByMidex([FromQuery]Maintable maintable)
         {
             var exhibitions = MuseumSystem.GetExhibitionByMidex(maintable.Midex);
             return Json(new { code = 0, data = new { items = exhibitions, total = exhibitions.Count() } });
@@ -71,7 +71,47 @@ namespace AdministrationServiceBackEnd.Controllers
         {
             if( MuseumSystem.DeleteMuseumByMidex(maintable))
                 return Json(new { code = 0, msg = "删除成功" });
-            return Json(new { code = 0, msg = "删除失败" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        //[Authorize]
+        [HttpPost("DeleteExhibitionByEid")]
+        public IActionResult DeleteExhibitionByeid([FromBody]Exhibition exhibition)
+        {
+            if (MuseumSystem.DeleteExhibitionByEid(exhibition))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteEducationByAid")]
+        public IActionResult DeleteEducationByAid([FromBody]Education education)
+        {
+            if (MuseumSystem.DeleteEducationByAid(education))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteCommentByUseridMidex")]
+        public IActionResult DeleteCommentByUseridMidex([FromBody]Comment comment)
+        {
+            if (UserSystem.DeleteOneComment(comment))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteNewsById")]
+        public IActionResult DeleteNewsById([FromBody]News news)
+        {
+            if (MuseumSystem.DeleteNewsById(news))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
+        }
+        [Authorize]
+        [HttpPost("DeleteCollectionsByOid")]
+        public IActionResult DeleteCollectionsByOid([FromBody]Collection collection)
+        {
+            if (MuseumSystem.DeleteCollectionsByOid(collection))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = -1, msg = "删除失败" });
         }
         private bool JudgeRoles(int x)
         {

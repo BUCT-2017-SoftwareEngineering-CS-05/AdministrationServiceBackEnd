@@ -92,7 +92,7 @@ namespace AdministrationServiceBackEnd.Models
             foreach (var elem in _context.Education)
                 if (elem.Midex == midex)
                     result.Add(elem);
-            return = result.AsEnumerable<Education>();
+            return result.AsEnumerable<Education>();
         }
         public static IEnumerable<News> GetNewsByName(string name)
         {
@@ -143,7 +143,7 @@ namespace AdministrationServiceBackEnd.Models
             _context.SaveChanges();
             return true;
         }
-        public static bool DeleteCollectionById(Collection collection)
+        public static bool DeleteCollectionsByOid(Collection collection)
         {
             collection = GetCollectionById((int)collection.Oid);
             if (collection == null)
@@ -152,7 +152,7 @@ namespace AdministrationServiceBackEnd.Models
             _context.SaveChanges();
             return true;
         }
-        public static bool DeleteExhibitionById(Exhibition exhibition)
+        public static bool DeleteExhibitionByEid(Exhibition exhibition)
         {
             exhibition = GetExhibitionById(exhibition.Eid);
             if (exhibition == null)
@@ -161,7 +161,7 @@ namespace AdministrationServiceBackEnd.Models
             _context.SaveChanges();
             return true;
         }
-        public static bool DeleteEducationById(Education education)
+        public static bool DeleteEducationByAid(Education education)
         {
             education = GetEducationById(education.Aid);
             if (education == null)
