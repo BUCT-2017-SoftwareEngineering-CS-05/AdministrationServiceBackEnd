@@ -43,7 +43,7 @@ namespace AdministrationServiceBackEnd.Controllers
         [HttpGet("Info")]
         public IActionResult Info()
         {
-            Admin admin = GetAdminFromAuthorizZation();
+            Admin admin = GetAdminFromAuthorization();
             List<string> roles = new List<string>();
             roles.Add(admin.Roles == 3 ? "admin" : "editor");
             return Json(new { code = 0, 
@@ -58,10 +58,10 @@ namespace AdministrationServiceBackEnd.Controllers
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            AdminSystem.AddLog(GetAdminFromAuthorizZation().Username, "注销");
+            AdminSystem.AddLog(GetAdminFromAuthorization().Username, "注销");
             return Json(new { code = 0, data = "退出成功" });
         }
-        private Admin GetAdminFromAuthorizZation()
+        private Admin GetAdminFromAuthorization()
         {
             var admin = new Admin();
             var claimsIdentity = this.User.Identity as ClaimsIdentity;

@@ -78,5 +78,14 @@ namespace AdministrationServiceBackEnd.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             return int.Parse(claimsIdentity.FindFirst("Roles")?.Value) >= x;
         }
+        private string GetAdminName()
+        {
+            var admin = new Admin();
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            admin.Username = claimsIdentity.FindFirst("Username")?.Value;
+            admin.Roles = int.Parse(claimsIdentity.FindFirst("Roles")?.Value);
+            admin.Id = int.Parse(claimsIdentity.FindFirst("Id")?.Value);
+            return admin.Username;
+        }
     }
 }
