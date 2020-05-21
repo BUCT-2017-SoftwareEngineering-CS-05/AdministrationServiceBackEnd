@@ -45,7 +45,17 @@ namespace AdministrationServiceBackEnd.Services
         }
         public static bool Load(string filename, bool save = true)
         {
-            if(save) Save(); // 恢复数据前，先备份一次，防止数据丢失
+            bool f = true;
+            string[] files = Directory.GetFiles(path, "*.sql");
+            foreach (string file in files)
+            {
+                if (filename == file[^22..^4])
+                {
+                    f = false;
+                }
+            }
+            if (f) return false;
+if (save) Save(); // 恢复数据前，先备份一次，防止数据丢失
 
             //string path = "./Backups";
             string host = "cdb-3lehih0k.cd.tencentcdb.com";
@@ -55,7 +65,8 @@ namespace AdministrationServiceBackEnd.Services
             string dbname = "museum_copy"; // 用copy做demo，防止惨案
 
             string str = "cd " + path + "\nmysql --local-infile -h " + host + " -P " + port + " -u "
-                + user + " -p" + pwd + "\ndrop database "+dbname+";\ncreate database "+dbname+";\n"
+                + user + " -p" + pwd + "\n";
+            string str1 = "drop database "+dbname+";\ncreate database "+dbname+";\n"
                 + "use "+dbname+"\nsource " + filename + ".sql\nexit\n";
 
             Console.WriteLine(str);
@@ -69,8 +80,8 @@ namespace AdministrationServiceBackEnd.Services
             p.StartInfo.CreateNoWindow = true;
             p.Start();
 
-            p.StandardInput.WriteLine(str + "&exit");
-
+            p.StandardInput.WriteLine(str);
+            p.StandardInput.WriteLine(str1 + "&exit");
             p.StandardInput.AutoFlush = true;
             p.StandardInput.Close();
             string output = p.StandardOutput.ReadToEnd();
