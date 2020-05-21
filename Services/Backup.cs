@@ -1,4 +1,5 @@
 ﻿using AdministrationServiceBackEnd.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +12,9 @@ namespace AdministrationServiceBackEnd.Services
     {
         private static MuseumContext _context = new MuseumContext();
         private const string path = "./Backups";
-        public static IEnumerable<Log> GetAllLogs()
+        public static async Task<IEnumerable<Log>> GetAllLogs()
         {
-            return _context.Log;
+            return await _context.Log.ToListAsync();
         }
         public static IEnumerable<Log> GetLogsByUsername(string username)
         {
@@ -60,9 +61,15 @@ namespace AdministrationServiceBackEnd.Services
         public static bool Load(string filename, bool save = true)
         {
             string[] files = Directory.GetFiles(path, "*.sql");
+            bool f = true;
             foreach (string file in files)
                 if (filename == file[^22..^4])
-                    return false;
+                {
+                    f = false;
+                    break;
+                }
+            if (f) return false;
+
             if (save) Save(); // 恢复数据前，先备份一次，防止数据丢失
 
             //string path = "./Backups";

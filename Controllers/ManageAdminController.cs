@@ -83,11 +83,11 @@ namespace AdministrationServiceBackEnd.Controllers
         }
         [Authorize]
         [HttpGet("GetAdminLogs")]
-        public IActionResult GetAdminLogs([FromQuery]Admin admin)
+        public async Task<IActionResult> GetAdminLogs([FromQuery]Admin admin)
         {
             if (!JudgeRoles(1))
                 return Json(new { code = -1, msg = "您没有权限进行此操作！" });
-            var logs = Backup.GetAllLogs();
+            var logs = await Backup.GetAllLogs();
             return Json(new { code = 0, data=new { items = logs, total = logs.Count() } });
         }
         private bool JudgeRoles(int x)
