@@ -24,11 +24,11 @@ namespace AdministrationServiceBackEnd.Services
             _user.MuteUser(user.Userid, 0);
             return true;
         }
-        public static bool DeleteOneComment(User user, int midex)
+        public static bool DeleteOneComment(Comment comment)
         {
-            if (_user.GetUserById(user.Userid) == null)
+            if (_user.GetUserById(comment.Userid) == null)
                 return false;
-            _comment.DeleteComment(user.Userid, midex);
+            _comment.DeleteComment(comment.Userid, comment.Midex);
             return true;
         }
         public static IEnumerable<Comment> GetCommentsByUser(User user)
