@@ -43,9 +43,11 @@ namespace AdministrationServiceBackEnd.Controllers
         public IActionResult Info()
         {
             Admin admin = GetAdminFromAuthorizZation();
+            List<string> roles = new List<string>();
+            roles.Add(admin.Roles == 3 ? "admin" : "editor");
             return Json(new { code = 0, 
-                data = new { 
-                    roles = admin.Roles==3?"admin":"editor", 
+                data = new {
+                    roles = roles,
                     id = admin.Id, 
                     username = admin.Username,
                     avatar = "https://www.youbaobao.xyz/mpvue-res/logo.jpg" }

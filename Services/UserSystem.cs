@@ -1,4 +1,5 @@
 ﻿using AdministrationServiceBackEnd.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AdministrationServiceBackEnd.Services
@@ -61,6 +62,20 @@ namespace AdministrationServiceBackEnd.Services
             if (_user.GetUserById(user.Userid) == null)
                 return false;
             _context.Remove(_user.GetUserById(user.Userid));
+            _context.SaveChanges();
+            return true;
+        }
+
+        internal static bool ChangeMute(User user)
+        {
+            user = _user.GetUserById(user.Userid);
+            if (user == null)
+                return false;
+            _context.Remove(user);
+            _context.SaveChanges();
+            if (user.Coright == 1) user.Coright = 0;
+            else user.Coright = 1;
+            _context.Add(user);
             _context.SaveChanges();
             return true;
         }

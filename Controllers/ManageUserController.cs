@@ -16,84 +16,54 @@ namespace AdministrationServiceBackEnd.Controllers
     [ApiController]
     public class ManageUserController : Controller
     {
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetUsers")]
         [HttpHead]
         public async Task<IActionResult> GetUser([FromQuery] UserDtoParameters parameters)
         {
-            //if (!_propertyMappingService.ValidMappingExistsFor<CompanyDto, Company>(parameters.OrderBy))
-            //{
-            //    return BadRequest();
-            //}
-
-            //if (!_propertyCheckerService.TypeHasProperties<CompanyDto>(parameters.Fields))
-            //{
-            //    return BadRequest();
-            //}
+            if (!JudgeRoles(1))
+                return Json(new { code = -1, msg = "您没有权限进行此操作！" });
             MuseumContext _context = new MuseumContext();
             IManageUser _manageUser = new ManageUser(_context);
             var users = await _manageUser.GetUsersAsync(parameters);
-            var paginationMetadata = new
-            {
-                totalCount = users.TotalCount,
-                pageSize = users.PageSize,
-                currentPage = users.CurrentPage,
-                totalPages = users.TotalPages
-            };
-            //Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata,
-            //    new JsonSerializerOptions
-            //    {
-            //        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            //    }));
-
-            //var companyDtos = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-            //var shapedData = companyDtos.ShapeData(parameters.Fields);
-
-            //var links = CreateLinksForCompany(parameters, companies.HasPrevious, companies.HasNext);
-
-            // { value: [xxx], links }
-
-            //var shapedCompaniesWithLinks = shapedData.Select(c =>
-            //{
-            //    var companyDict = c as IDictionary<string, object>;
-            //    var companyLinks = CreateLinksForCompany((Guid)companyDict["Id"], null);
-            //    companyDict.Add("links", companyLinks);
-            //    return companyDict;
-            //});
-
-            //var linkedCollectionResource = new
-            //{
-            //    value = shapedCompaniesWithLinks,
-            //    links
-            //};
             return Ok(new { code=0,data=new{ items=users,total = users.TotalCount} });
         }
         // POST api/<controller>/Changepwd
-        //[Authorize]
+        [Authorize]
         [HttpPost("Changepwd")]
         public  IActionResult Changepwd([FromBody]User user)
         {
-            //if (GetRolesFromAuthorizZation() < 0)
-            //{
-            //    return Json(new { code = -1, msg = "您没有权限修改用户密码！" });
-            //}
-            if(UserSystem.ChangePassword(user))
+            if (!JudgeRoles(1))
+                return Json(new { code = -1, msg = "您没有权限修改用户密码！" });
+            if (UserSystem.ChangePassword(user))
                 return Json(new { code = 0, msg = "密码修改成功" });
             return Json(new { code = -1, msg = "密码修改失败" });
         }
         // DELETE api/<controller>/5
-        //[Authorize]
+        [Authorize]
         [HttpGet("Delete")]
         public IActionResult Delete([FromQuery]User user)
         {
-           if(UserSystem.DeleteUser(user))
-                return Json(new {code=0,msg="删除成功！" } );
-            return Json(new { code = 0, msg = "删除失败！" });
+            if (!JudgeRoles(1))
+                return Json(new { code = -1, msg = "您没有权限进行此操作！" });
+            if (UserSystem.DeleteUser(user))
+                return Json(new {code = 0,msg="删除成功！" } );
+            return Json(new { code = -1, msg = "删除失败！" });
         }
-        private int GetRolesFromAuthorizZation()
+        [Authorize]
+        [HttpGet("ChangeMute")]
+        public IActionResult ChangeMute([FromQuery]User user)
+        {
+            if (!JudgeRoles(1))
+                return Json(new { code = -1, msg = "您没有权限进行此操作！" });
+            if (UserSystem.ChangeMute(user))
+                return Json(new { code = 0, msg = "修改禁言状态成功！" });
+            return Json(new { code = -1, msg = "更改失败！" });
+        }
+        private bool JudgeRoles(int x)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            return int.Parse(claimsIdentity.FindFirst("Roles")?.Value);
+            return int.Parse(claimsIdentity.FindFirst("Roles")?.Value)>=x;
         }
     }
 }

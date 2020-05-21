@@ -15,6 +15,7 @@ namespace AdministrationServiceBackEnd.Models
         {
         }
 
+        public virtual DbSet<Academic> Academic { get; set; }
         public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<Collection> Collection { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
@@ -37,6 +38,34 @@ namespace AdministrationServiceBackEnd.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Academic>(entity =>
+            {
+                entity.HasKey(e => e.AdId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.AdId)
+                    .HasColumnName("ad_id")
+                    .HasColumnType("int(10) unsigned");
+
+                entity.Property(e => e.Mid)
+                    .HasColumnName("mid")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(200)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasColumnName("url")
+                    .HasColumnType("varchar(200)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
             modelBuilder.Entity<Admin>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Username })
@@ -53,16 +82,16 @@ namespace AdministrationServiceBackEnd.Models
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Roles)
-                    .HasColumnName("roles")
-                    .HasColumnType("int(11)");
-
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Roles)
+                    .HasColumnName("roles")
+                    .HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<Collection>(entity =>
@@ -87,13 +116,13 @@ namespace AdministrationServiceBackEnd.Models
                 entity.Property(e => e.Oname)
                     .IsRequired()
                     .HasColumnName("oname")
-                    .HasColumnType("varchar(30)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.Ophoto)
                     .HasColumnName("ophoto")
-                    .HasColumnType("varchar(100)")
+                    .HasColumnType("text")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
             });
@@ -138,10 +167,15 @@ namespace AdministrationServiceBackEnd.Models
 
             modelBuilder.Entity<Education>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Aid)
+                    .HasName("PRIMARY");
 
-                entity.Property(e => e.Mid)
-                    .HasColumnName("mid")
+                entity.Property(e => e.Aid)
+                    .HasColumnName("aid")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Midex)
+                    .HasColumnName("midex")
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.Name)
@@ -288,7 +322,7 @@ namespace AdministrationServiceBackEnd.Models
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Museum)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(100)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
