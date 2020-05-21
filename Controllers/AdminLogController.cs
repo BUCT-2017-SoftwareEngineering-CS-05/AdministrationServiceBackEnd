@@ -54,6 +54,7 @@ namespace AdministrationServiceBackEnd.Controllers
                     avatar = "https://www.youbaobao.xyz/mpvue-res/logo.jpg" }
             });
         }
+        [Authorize]
         [HttpPost("Logout")]
         public IActionResult Logout()
         {

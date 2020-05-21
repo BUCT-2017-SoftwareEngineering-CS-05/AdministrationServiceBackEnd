@@ -36,7 +36,7 @@ namespace AdministrationServiceBackEnd.Controllers
         public IActionResult GetAllBackups()
         {
             var backups=Backup.GetAllBackups();
-            return Json(new {data = new{items=backups,total=backups.Count()} });
+            return Json(new {code = 0,data = new{items=backups,total=backups.Count()} });
         }
         [Authorize]
         [HttpGet("DeleteBackup")]

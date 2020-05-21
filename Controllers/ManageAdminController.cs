@@ -73,6 +73,7 @@ namespace AdministrationServiceBackEnd.Controllers
         {
             if (!JudgeRoles(1))
                 return Json(new { code = -1, msg = "您没有权限进行此操作！" });
+            admin = AdminSystem.GetAdminById(admin);
             if (AdminSystem.DeleteAdmin(admin))
             {
                 AdminSystem.AddLog(GetAdminFromAuthorizZation().Username, "删除用户："+admin.Username);
