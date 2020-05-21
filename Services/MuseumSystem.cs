@@ -109,5 +109,13 @@ namespace AdministrationServiceBackEnd.Models
         {
             return _context.MuseumInformation.FirstOrDefault(n => n.Midex == midex);
         }
+        public static bool DeleteMuseumByMidex(Maintable maintable)
+        {
+            maintable = GetMuseumByMidex(maintable.Midex);
+            if (maintable == null) return false;
+            _context.Maintable.Remove(maintable);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

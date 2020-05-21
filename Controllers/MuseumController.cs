@@ -16,54 +16,62 @@ namespace AdministrationServiceBackEnd.Controllers
     public class MuseumController : Controller
     {
         // GET: api/<controller>
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetMuseums")]
         public async Task<IActionResult> GetMuseums()
         {
             var maintables= await MuseumSystem.GetMaintable();
             return Json(new { code=0,data = new { items = maintables, total = maintables.Count() } });
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetMuseumByMidex")]
         public IActionResult GetMuseum([FromQuery]Maintable maintable)
         {
             var maintable1 = MuseumSystem.GetMuseumByMidex(maintable.Midex);
             return Json(new { code = 0, data = maintable1 });
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetExhibitionByMidex")]
         public IActionResult GetMuseumInformationByMidex([FromQuery]Maintable maintable)
         {
             var exhibitions = MuseumSystem.GetExhibitionByMidex(maintable.Midex);
-            return Json(new { code = 0, data = exhibitions, total = exhibitions.Count() });
+            return Json(new { code = 0, data = new { items = exhibitions, total = exhibitions.Count() } });
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetEducationByMidex")]
         public IActionResult GetEducationByMidex([FromQuery]Maintable maintable)
         {
             var educations = MuseumSystem.GetEducationByMidex(maintable.Midex);
-            return Json(new { code = 0, data = educations, total = educations.Count() });
+            return Json(new { code = 0, data = new { items = educations, total = educations.Count() } });
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetCommentByMidex")]
         public async Task<IActionResult> GetCommentByMidex([FromQuery]Maintable maintable)
         {
             var comment =  await MuseumSystem.GetCommentByMidex(maintable.Midex);
-            return Json(new { code = 0, data = comment,total=comment.Count() });
+            return Json(new { code = 0, data = new { items = comment, total = comment.Count() } });
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetNewsByMidex")]
         public async Task<IActionResult> GetNewsByMidex([FromQuery]CollectionDtoParameters parameters)
         {
             var news = await MuseumSystem.GetNewsByMidex(parameters);
-            return Json(new { code = 0, data = news, total = news.TotalCount });
+            return Json(new { code = 0, data = new { items = news, total = news.TotalCount } });
         }
         [Authorize]
         [HttpGet("GetCollectionsByMidex")]
         public async Task<IActionResult> GetCollectionsByMidex([FromQuery]CollectionDtoParameters parameters)
         {
             var collections = await MuseumSystem.GetCollectionsAsync(parameters);
-            return Json(new { code = 0, data = collections, total = collections.TotalCount });
+            return Json(new { code = 0, data = new { items = collections, total = collections.TotalCount } });
+        }
+        [Authorize]
+        [HttpPost("DeleteMuseumByMidex")]
+        public IActionResult DeleteMuseumByMidex([FromBody]Maintable maintable)
+        {
+            if( MuseumSystem.DeleteMuseumByMidex(maintable))
+                return Json(new { code = 0, msg = "删除成功" });
+            return Json(new { code = 0, msg = "删除失败" });
         }
         private bool JudgeRoles(int x)
         {
